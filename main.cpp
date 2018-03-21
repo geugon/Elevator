@@ -4,6 +4,7 @@
 #include <map>
 #include <algorithm>
 #include "Rider.h"
+#include "Lift.h"
 
 using std::vector;
 using std::map;
@@ -28,29 +29,44 @@ int main(){
     }
     sort(riders.begin(), riders.end(), compare);
 
+    // Initialize Elevators
+    vector<Lift> lifts;
+    lifts.reserve(nlifts);
+    for (unsigned int i=0; i != nfloors; ++i){
+        lifts.emplace_back(nfloors);
+    }
+
     // Run
     unsigned int tick = 0;
     bool running = true;
     vector<Rider>::const_iterator nextRider = riders.begin();
-    Requests requests(nfloors);
+    Requests requestsUp(nfloors);
+    Requests requestsDown(nfloors);
 
     std::cout << "Elevator Simulation Initiated" << std::endl;
     while (running){
 
         // Generate request as riders appear
         while (nextRider->tick == tick){
-            requests[nextRider->on].push_back(*nextRider);
+            if (nextRider->on > nextRider->off){
+               requestsDown[nextRider->on].push_back(*nextRider);
+            }
+            else{
+               requestsUp[nextRider->on].push_back(*nextRider);
+            }
             ++nextRider;
         }
   
-        // Plan and Execute tick for elevators
-        // TODO
+        // Plan Elevators 
+        // TODO        
 
+        // Execute Elevators
+        // TODO
 
         // Remove Completed Requests
         cout << endl;
-        for (Requests::iterator iter=requests.begin();
-             iter != requests.end(); ++iter){
+        for (Requests::iterator iter=requestsUp.begin();
+             iter != requestsUp.end(); ++iter){
             // For now assume everyone is picked up 10 ticks after the first request to a floor is made
             if (iter->size() == 0) {
                 cout << "NA" << endl;
@@ -62,6 +78,8 @@ int main(){
                 iter->clear();
             }
         }
+
+        // Generate visual report
 
         // Termination condition will switch to when last ride is complete, once that data exists
         if (nextRider == riders.end()){
