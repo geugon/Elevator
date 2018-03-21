@@ -10,5 +10,6 @@ struct Rider{
 };
 
 std::istream& read(std::istream&, Rider&);
+bool compare(const Rider&, const Rider&);
 
 #endif
