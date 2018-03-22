@@ -4,8 +4,6 @@
 #include <vector>
 #include "Rider.h"
 
-enum Plan { up, down, doorsOpen };
-
 class Lift {
     public:
         Lift() {};
@@ -13,12 +11,11 @@ class Lift {
 
         bool has_riders();
         unsigned int closest_dest();
-        void move();
         std::vector<Rider> exchange(std::vector<Rider>);
 
+    private:
         int floor;
         std::vector< std::vector<Rider> > riders;
-        Plan plan;
 
 };
 

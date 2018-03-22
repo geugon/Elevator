@@ -1,6 +1,6 @@
 #include "Lift.h"
 
-Lift::Lift(int nfloors): floor(0), plan(doorsOpen){
+Lift::Lift(int nfloors): floor(0){
     riders.resize(nfloors);
 }
 
