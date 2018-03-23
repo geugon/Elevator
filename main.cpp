@@ -44,7 +44,7 @@ int main(){
             ++nextRider;
         }
   
-        // Run lifts 
+        // Run lifts
         bank.plan();
         bank.execute();
         bank.summary();

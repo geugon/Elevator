@@ -5,8 +5,6 @@
 #include "Rider.h"
 #include "Lift.h"
 
-typedef std::vector< std::vector<Rider> > Requests;
-
 /* The lifts Bank contains all lifts and active requests.
  * It determines and where lifts should go */
 
@@ -22,8 +20,8 @@ class Bank {
     private:
         int floor;
         std::vector< Lift > lifts;
-        Requests requestsUp;
-        Requests requestsDown;
+        SortedRiders requestsUp;
+        SortedRiders requestsDown;
 
 };
 #endif

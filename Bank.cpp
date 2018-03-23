@@ -24,6 +24,8 @@ void Bank::add_request(const Rider& nextRider){
 
 void Bank::plan(){
     //sets orders for all lifts
+    
+    //early algorithm for initial test will have an up-focused lift and a down-focused lift.  Not a good stragegy, but convenient for testing
 }
 
 void Bank::execute(){
@@ -32,7 +34,7 @@ void Bank::execute(){
 
 void Bank::summary(){
     cout << endl;
-    for (Requests::iterator iter=requestsUp.begin();
+    for (SortedRiders::iterator iter=requestsUp.begin();
             iter != requestsUp.end(); ++iter){
         if (iter->size() == 0) {
             cout << "NA" << endl;
