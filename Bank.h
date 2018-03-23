@@ -8,6 +8,8 @@
 /* The lifts Bank contains all lifts and active requests.
  * It determines and where lifts should go */
 
+enum Order { up, down, exchange };
+
 class Bank {
     public:
         Bank() {};
@@ -18,10 +20,12 @@ class Bank {
         void summary();
 
     private:
-        int floor;
+        unsigned int nfloors;
+        unsigned int nlifts;
         std::vector< Lift > lifts;
         SortedRiders requestsUp;
         SortedRiders requestsDown;
+        std::vector<Order> orders;
 
 };
 #endif
