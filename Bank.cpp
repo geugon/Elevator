@@ -6,7 +6,7 @@ using std::endl;
 using std::vector;
 
 Bank::Bank(const unsigned int l, const unsigned int f)
-:nlifts(l), nfloors(f), requestsUp(f), requestsDown(f), orders(l, exchange)
+:nlifts(l), nfloors(f), requestsUp(f), requestsDown(f), orders(l, exchangeUp)
 {
     lifts.reserve(nlifts);
     for (unsigned int i=0; i != nfloors; ++i){
@@ -29,14 +29,14 @@ void Bank::plan(){
     //early algorithm for initial test will have an up-focused lift and a down-focused lift.  Not a good stragegy, but convenient for testing
     
     unsigned int cur_floor;
-    unsigned int target;
+    int target; // can be for down elevator with no target
 
     // Up elevator
     cur_floor = lifts[0].floor;
     if (lifts[0].has_riders()){
         if (lifts[0].riders[cur_floor].size() != 0 ||
             requestsUp[cur_floor].size() != 0){
-            orders[0] = exchange;
+            orders[0] = exchangeUp;
         }
         else{
             orders[0] = up;
@@ -45,12 +45,12 @@ void Bank::plan(){
     else {
         for (target=0; target!=nfloors; ++target){
             if (requestsUp[target].size() != 0) {
-              continue;
+              break;
             }
         }
         if (target == nfloors) { //i.e. no-one to pickup
             if (cur_floor == 0){
-                orders[0] = exchange;
+                orders[0] = exchangeUp;
             }
             else{
                 orders[0] = down;
@@ -63,7 +63,7 @@ void Bank::plan(){
             orders[0] = down;
         }
         else{
-            orders[0] = exchange;
+            orders[0] = exchangeUp;
         }
     }
 
@@ -71,8 +71,8 @@ void Bank::plan(){
     cur_floor = lifts[1].floor;
     if (lifts[1].has_riders()){
         if (lifts[1].riders[cur_floor].size() != 0 ||
-            requestsUp[cur_floor].size() != 0){
-            orders[1] = exchange;
+            requestsDown[cur_floor].size() != 0){
+            orders[1] = exchangeDown;
         }
         else{
             orders[1] = down;
@@ -80,13 +80,13 @@ void Bank::plan(){
     }
     else {
         for (target=nfloors-1; target!=-1; --target){
-            if (requestsUp[target].size() != 0) {
-              continue;
+            if (requestsDown[target].size() != 0) {
+              break;
             }
         }
-        if (target == nfloors) { //i.e. no-one to pickup
+        if (target == -1) { //i.e. no-one to pickup
             if (cur_floor == nfloors-1){
-                orders[1] = exchange;
+                orders[1] = exchangeDown;
             }
             else{
                 orders[1] = up;
@@ -99,14 +99,30 @@ void Bank::plan(){
             orders[1] = down;
         }
         else{
-            orders[1] = exchange;
+            orders[1] = exchangeDown;
         }
     }
 }
 
 
 void Bank::execute(){
-    //executes orders for all lifts
+    vector <Rider> unloaded; //trashed for now, could use for tracking later
+    for (unsigned int i=0; i!=nlifts; ++i){
+        switch (orders[i]) {
+            case up:
+                ++(lifts[i].floor);
+                break;
+            case down:
+                --(lifts[i].floor);
+                break;
+            case exchangeUp:
+                unloaded = lifts[i].exchange(requestsUp[lifts[i].floor]);
+                break;
+            case exchangeDown:
+                unloaded = lifts[i].exchange(requestsDown[lifts[i].floor]);
+                break;
+        }
+    }
 }
 
 void Bank::summary(){
@@ -117,11 +133,11 @@ void Bank::summary(){
         cout << requestsUp[i].size() << "\t" 
              << requestsDown[i].size() << "\t";
         for (unsigned int j=0; j != nlifts; ++j){
-            if (lifts[j].floor = i){
-                cout << "." << "\t";
+            if (lifts[j].floor == i){
+                cout << "X" << "\t";
             }
             else {
-                cout << "X" << "\t";
+                cout << "." << "\t";
             }
         }
         cout << endl;

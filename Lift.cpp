@@ -32,12 +32,13 @@ unsigned int Lift::closest_dest(){
 
 }
 
-vector<Rider> Lift::exchange(vector<Rider> ridersOn){
+vector<Rider> Lift::exchange(vector<Rider>& ridersOn){
     // Some riders get on
     for (vector<Rider>::iterator iter=ridersOn.begin();
          iter!=ridersOn.end(); ++iter){
         riders[iter->off].push_back(*iter);
     }
+    ridersOn.clear();
 
     // Some riders get off
     vector<Rider> ridersOff = riders[floor];

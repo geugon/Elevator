@@ -8,7 +8,7 @@
 /* The lifts Bank contains all lifts and active requests.
  * It determines and where lifts should go */
 
-enum Order { up, down, exchange };
+enum Order { up, down, exchangeUp, exchangeDown };
 
 class Bank {
     public:

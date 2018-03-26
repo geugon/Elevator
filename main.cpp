@@ -46,14 +46,18 @@ int main(){
   
         // Run lifts
         bank.plan();
-        bank.execute();
         bank.summary();
+        bank.execute();
 
         // Termination condition will switch to when last ride is complete, once that data exists
         if (nextRider == riders.end()){
             running = false;
         }
 
+/*        if (tick == 4){
+            running = false;
+        }
+*/
         ++tick;
     }
 

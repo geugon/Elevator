@@ -9,9 +9,9 @@ struct Lift {
 
     bool has_riders();
     unsigned int closest_dest();
-    std::vector<Rider> exchange(std::vector<Rider>);
+    std::vector<Rider> exchange(std::vector<Rider>&);
 
-    int floor;
+    unsigned int floor;
     SortedRiders riders;
 
 };
